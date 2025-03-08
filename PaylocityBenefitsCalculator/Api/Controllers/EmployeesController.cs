@@ -72,7 +72,7 @@ public class EmployeesController : ControllerBase
                 Id = 3,
                 FirstName = "Michael",
                 LastName = "Jordan",
-                Salary = 143211.12m,
+                Salary = 143212.12m,
                 DateOfBirth = new DateTime(1963, 2, 17),
                 Dependents = new List<GetDependentDto>
                 {
