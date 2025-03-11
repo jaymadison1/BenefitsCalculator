@@ -3,6 +3,8 @@ using Api.Dtos.Employee;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Api.Controllers;
 
@@ -10,90 +12,94 @@ namespace Api.Controllers;
 [Route("api/v1/[controller]")]
 public class EmployeesController : ControllerBase
 {
+    private readonly string _jsonEmployeesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "employees.json");
+
     [SwaggerOperation(Summary = "Get employee by id")]
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetEmployeeDto>>> Get(int id)
     {
-        throw new NotImplementedException();
+        if (!System.IO.File.Exists(_jsonEmployeesPath))
+        {
+            return NotFound(new ApiResponse<GetEmployeeDto>
+            {
+                Success = false,
+                Message = "Employee data file not found."
+            });
+        }
+
+        try
+        {
+            var jsonData = await System.IO.File.ReadAllTextAsync(_jsonEmployeesPath);
+            var employees = JsonSerializer.Deserialize<List<GetEmployeeDto>>(jsonData, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() } 
+            });
+
+            var employee = employees?.FirstOrDefault(e => e.Id == id);
+
+            if (employee == null)
+            {
+                return NotFound(new ApiResponse<GetEmployeeDto>
+                {
+                    Success = false,
+                    Message = $"Employee with ID {id} not found."
+                });
+            }
+
+            return new ApiResponse<GetEmployeeDto>
+            {
+                Data = employee,
+                Success = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse<GetEmployeeDto>
+            {
+                Success = false,
+                Message = $"Error reading employee data: {ex.Message}"
+            });
+        }
     }
 
     [SwaggerOperation(Summary = "Get all employees")]
     [HttpGet("")]
     public async Task<ActionResult<ApiResponse<List<GetEmployeeDto>>>> GetAll()
     {
-        //task: use a more realistic production approach
-        var employees = new List<GetEmployeeDto>
-        {
-            new()
-            {
-                Id = 1,
-                FirstName = "LeBron",
-                LastName = "James",
-                Salary = 75420.99m,
-                DateOfBirth = new DateTime(1984, 12, 30)
-            },
-            new()
-            {
-                Id = 2,
-                FirstName = "Ja",
-                LastName = "Morant",
-                Salary = 92365.22m,
-                DateOfBirth = new DateTime(1999, 8, 10),
-                Dependents = new List<GetDependentDto>
-                {
-                    new()
-                    {
-                        Id = 1,
-                        FirstName = "Spouse",
-                        LastName = "Morant",
-                        Relationship = Relationship.Spouse,
-                        DateOfBirth = new DateTime(1998, 3, 3)
-                    },
-                    new()
-                    {
-                        Id = 2,
-                        FirstName = "Child1",
-                        LastName = "Morant",
-                        Relationship = Relationship.Child,
-                        DateOfBirth = new DateTime(2020, 6, 23)
-                    },
-                    new()
-                    {
-                        Id = 3,
-                        FirstName = "Child2",
-                        LastName = "Morant",
-                        Relationship = Relationship.Child,
-                        DateOfBirth = new DateTime(2021, 5, 18)
-                    }
-                }
-            },
-            new()
-            {
-                Id = 3,
-                FirstName = "Michael",
-                LastName = "Jordan",
-                Salary = 143212.12m,
-                DateOfBirth = new DateTime(1963, 2, 17),
-                Dependents = new List<GetDependentDto>
-                {
-                    new()
-                    {
-                        Id = 4,
-                        FirstName = "DP",
-                        LastName = "Jordan",
-                        Relationship = Relationship.DomesticPartner,
-                        DateOfBirth = new DateTime(1974, 1, 2)
-                    }
-                }
-            }
-        };
+        // [Jay] Moved hardcoded data to JSON file to better mimic an external data store.
 
-        var result = new ApiResponse<List<GetEmployeeDto>>
+        if (!System.IO.File.Exists(_jsonEmployeesPath))
         {
-            Data = employees,
-            Success = true
-        };
+            return NotFound(new ApiResponse<List<GetEmployeeDto>>
+            {
+                Success = false,
+                Message = "Employee data file not found."
+            });
+        }
 
-        return result;
+        try
+        {
+            var jsonData = await System.IO.File.ReadAllTextAsync(_jsonEmployeesPath);
+            var employees = JsonSerializer.Deserialize<List<GetEmployeeDto>>(jsonData, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                Converters = { new JsonStringEnumConverter() } 
+            });
+
+            return new ApiResponse<List<GetEmployeeDto>>
+            {
+                Data = employees,
+                Success = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse<List<GetEmployeeDto>>
+            {
+                Success = false,
+                Message = $"Error reading employee data: {ex.Message}"
+            });
+        }
     }
 }
