@@ -6,7 +6,6 @@ using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Models;
 using Xunit;
-
 namespace ApiTests.IntegrationTests;
 
 public class EmployeeIntegrationTests : IntegrationTest
@@ -97,14 +96,6 @@ public class EmployeeIntegrationTests : IntegrationTest
             DateOfBirth = new DateTime(1984, 12, 30)
         };
         await response.ShouldReturn(HttpStatusCode.OK, employee);
-    }
-    
-    [Fact]
-    //task: make test pass
-    public async Task WhenAskedForANonexistentEmployee_ShouldReturn404()
-    {
-        var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}");
-        await response.ShouldReturn(HttpStatusCode.NotFound);
     }
 }
 

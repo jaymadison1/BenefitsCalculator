@@ -67,6 +67,7 @@ public class EmployeesController : ControllerBase
     [HttpGet("")]
     public async Task<ActionResult<ApiResponse<List<GetEmployeeDto>>>> GetAll()
     {
+        //task: use a more realistic production approach
         // [Jay] Moved hardcoded data to JSON file to better mimic an external data store.
 
         if (!System.IO.File.Exists(_jsonEmployeesPath))
