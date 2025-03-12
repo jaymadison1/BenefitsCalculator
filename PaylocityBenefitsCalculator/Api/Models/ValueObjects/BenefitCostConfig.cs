@@ -2,13 +2,15 @@
 
 public class BenefitCostConfig
 {
-    public Money EmployeeBaseCost { get; }
-    public Money DependentBaseCost { get; }
-    public Money Over50ExtraCost { get; }
-    public Money HighEarnerThreshold { get; }
-    public decimal HighEarnerPenaltyRate { get; } // 2% = 0.02
+    public decimal EmployeeBaseCost { get; set; } = 0.0m;
+    public decimal DependentBaseCost { get; set; } = 0.0m;
+    public decimal Over50ExtraCost { get; set; } = 0.0m;
+    public decimal HighEarnerThreshold { get; set; } = 0.0m;
+    public decimal HighEarnerPenaltyRate { get; set; } = 0.0m;
 
-    public BenefitCostConfig(Money employeeBaseCost, Money dependentBaseCost, Money over50ExtraCost, Money highEarnerThreshold, decimal highEarnerPenaltyRate)
+    public BenefitCostConfig() { }
+
+    public BenefitCostConfig(decimal employeeBaseCost, decimal dependentBaseCost, decimal over50ExtraCost, decimal highEarnerThreshold, decimal highEarnerPenaltyRate)
     {
         EmployeeBaseCost = employeeBaseCost;
         DependentBaseCost = dependentBaseCost;
@@ -16,4 +18,9 @@ public class BenefitCostConfig
         HighEarnerThreshold = highEarnerThreshold;
         HighEarnerPenaltyRate = highEarnerPenaltyRate;
     }
+
+    public Money GetEmployeeBaseCost() => new Money(EmployeeBaseCost);
+    public Money GetDependentBaseCost() => new Money(DependentBaseCost);
+    public Money GetOver50ExtraCost() => new Money(Over50ExtraCost);
+    public Money GetHighEarnerThreshold() => new Money(HighEarnerThreshold);
 }

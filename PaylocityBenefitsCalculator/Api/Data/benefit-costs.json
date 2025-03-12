@@ -1,0 +1,7 @@
+{
+  "EmployeeBaseCost": 1000.00,
+  "DependentBaseCost": 600.00,
+  "Over50ExtraCost": 200.00,
+  "HighEarnerThreshold": 80000.00,
+  "HighEarnerPenaltyRate": 0.02
+}

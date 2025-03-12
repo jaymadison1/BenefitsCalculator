@@ -1,8 +1,31 @@
+using Api.Models.ValueObjects;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//[Jay] Load BenefitCostConfig from json
+var jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "benefit-costs.json");
+
+if (File.Exists(jsonFilePath))
+{
+    var jsonData = File.ReadAllText(jsonFilePath);
+    var benefitConfig = JsonSerializer.Deserialize<BenefitCostConfig>(jsonData);
+
+    if (benefitConfig == null)
+    {
+        throw new Exception("Benefit cost configuration file is invalid or missing required values.");
+    }
+    builder.Services.AddSingleton(benefitConfig);
+}
+else
+{
+    throw new Exception("Benefit cost configuration file is missing.");
+}
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
