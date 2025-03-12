@@ -21,4 +21,21 @@ public class Money
     }
 
     public Money Multiply(decimal factor) => new Money(this.Amount * factor);
+
+
+    //Override Equals() to compare values instead of references
+    public override bool Equals(object? obj)
+    {
+        if (obj is Money other)
+        {
+            return Amount == other.Amount;
+        }
+        return false;
+    }
+
+    // Ensures two Money instances with the same Amount have the same hash code
+    public override int GetHashCode()
+    {
+        return Amount.GetHashCode();
+    }
 }
