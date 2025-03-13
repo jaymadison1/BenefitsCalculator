@@ -2,7 +2,8 @@ using Xunit;
 using ApiTests.Mocks;
 using System.Threading.Tasks;
 using Api.Models.ValueObjects;
-using Api.Models;
+
+namespace ApiTests.UnitTests;
 
 public class PaycheckServiceTests
 {

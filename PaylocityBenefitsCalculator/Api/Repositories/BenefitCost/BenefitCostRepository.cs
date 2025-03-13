@@ -1,9 +1,14 @@
 ﻿using Api.Models.ValueObjects;
 using System.Text.Json;
 
+
+
 public class BenefitCostRepository : IBenefitCostRepository
 {
+    //[Jay]  Eventually we can pull benefit costs from a data source rather than json.  This will give flexibility to load config values dynamically
+
     private readonly string _jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "benefit-costs.json");
+      
 
     public async Task<BenefitCostConfig> GetBenefitCostConfigAsync()
     {

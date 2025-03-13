@@ -22,6 +22,7 @@ public class DependentService : IDependentService
         return dependent != null ? MapToDto(dependent) : null;
     }
 
+    //[Jay] Convert dependent domain model to the dependent dto 
     private static GetDependentDto MapToDto(Dependent dependent)
     {
         return new GetDependentDto

@@ -23,6 +23,7 @@ public class EmployeeService : IEmployeeService
         return employee != null ? MapToDto(employee) : null;
     }
 
+    //[Jay] Convert employee domain model to the employee dto 
     private static GetEmployeeDto MapToDto(Employee employee)
     {
         return new GetEmployeeDto

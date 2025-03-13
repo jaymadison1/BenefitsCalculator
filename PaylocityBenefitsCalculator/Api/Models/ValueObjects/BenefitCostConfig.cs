@@ -1,5 +1,9 @@
 ﻿namespace Api.Models.ValueObjects;
 
+//[Jay] Decided to build out the rule config settings for a quick calculation test using a json data source.  
+
+//[Jay] TODO: Instead of a config object, we can tie the config values in the BenefitCostRules
+
 public class BenefitCostConfig
 {
     public decimal EmployeeBaseCost { get; set; } = 0.0m;

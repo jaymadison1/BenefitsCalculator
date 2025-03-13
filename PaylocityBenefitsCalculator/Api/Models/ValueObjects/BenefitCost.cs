@@ -6,38 +6,26 @@ public class BenefitCost
     public Money AnnualCost { get; }
     public Money PerPaycheckCost { get; }
 
-    public BenefitCost(Salary salary, List<Dependent> dependents, BenefitCostConfig config)
+    //[Jay] Encapsulate the benefit cost logic to keep all calculations in one place.
+
+    public BenefitCost(Employee employee, BenefitCostConfig config, List<IBenefitCostRule> rules)
     {
-        // Start with the employee's base cost
-        Money monthlyCost = new Money(config.EmployeeBaseCost);
+        Money monthlyCost = new Money(0);
 
-        // Add cost for each dependent.
-        foreach (var dep in dependents)
+        foreach (var rule in rules)
         {
-            monthlyCost = monthlyCost.Add(new Money(config.DependentBaseCost));
-
-            //Add 
-            if (dep.IsOverAge(config.DependentOverAgeThreshold))
-            {
-                monthlyCost = monthlyCost.Add(new Money(config.DependentOverAgeCost));
-            }
-        }
-
-        // Add high earner penalty if applicable.
-        if (salary.Yearly.Amount > config.HighEarnerThreshold)
-        {
-            // 2% of yearly salary added as benefits cost (spread monthly).
-            Money extraYearlyCost = salary.Yearly.Multiply(config.HighEarnerCostRate);
-            Money extraMonthlyCost = new Money(extraYearlyCost.Amount / 12);
-            monthlyCost = monthlyCost.Add(extraMonthlyCost);
+            monthlyCost = rule.ApplyRule(employee, config, monthlyCost);
         }
 
         MonthlyCost = monthlyCost;
         AnnualCost = new Money(MonthlyCost.Amount * 12);
 
-        // Calculate per paycheck cost by dividing the annual cost over 26 paychecks.
+        //[Jay]  Calculate per paycheck cost by dividing the annual cost over 26 paychecks.  
+        //[Jay]  TODO: Review options to handle potential rounding issues (ie round up in favor of employee, amend the last paycheck, etc)
+
         decimal rawPerPaycheck = AnnualCost.Amount / 26;
 
         PerPaycheckCost = new Money(rawPerPaycheck);
     }
+
 }

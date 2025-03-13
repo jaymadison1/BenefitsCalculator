@@ -1,5 +1,7 @@
 ﻿namespace Api.Models.ValueObjects;
 
+
+//[Jay] Having a money value object helps align with the paycheck domain terminology, enforce business rules, etc
 public class Money
 {
     public decimal Amount { get; }
