@@ -5,26 +5,16 @@ using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-//[Jay] Load BenefitCostConfig from json
-var jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "benefit-costs.json");
+// Register Services
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDependentService, DependentService>();
+builder.Services.AddScoped<IPaycheckService, PaycheckService>();
 
-if (File.Exists(jsonFilePath))
-{
-    var jsonData = File.ReadAllText(jsonFilePath);
-    var benefitConfig = JsonSerializer.Deserialize<BenefitCostConfig>(jsonData);
-
-    if (benefitConfig == null)
-    {
-        throw new Exception("Benefit cost configuration file is invalid or missing required values.");
-    }
-    builder.Services.AddSingleton(benefitConfig);
-}
-else
-{
-    throw new Exception("Benefit cost configuration file is missing.");
-}
+// Register Repositories
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IDependentRepository, DependentRepository>();
+builder.Services.AddScoped<IBenefitCostRepository, BenefitCostRepository>(); 
 
 
 builder.Services.AddControllers();

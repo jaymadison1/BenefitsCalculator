@@ -35,21 +35,4 @@ public class Employee
             Dependents.Remove(dependent);
         }
     }
-
-
-    public Paycheck CalculatePaycheck(BenefitCostConfig config)
-    {
-        // Convert salary into a `Money` object
-        var salary = new Salary(new Money(Salary));
-
-        // Calculate benefit costs using config
-        var benefitCost = new BenefitCost(salary, Dependents.ToList(), config);
-
-        // Calculate gross and net pay
-        var grossPay = new Money(salary.Yearly.Amount / 26);
-        var deductions = benefitCost.PerPaycheckCost;
-        var netPay = grossPay.Subtract(deductions);
-
-        return new Paycheck(Id, grossPay, deductions);
-    }
 }
