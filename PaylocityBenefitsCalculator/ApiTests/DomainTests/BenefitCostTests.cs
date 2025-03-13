@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Api.Models;
 using Api.Models.ValueObjects;
 using Xunit;
-namespace ApiTests.UnitTests;
+namespace ApiTests.DomainTests;
 
-public class BenefitCostsUnitTest
+public class BenefitCostTests
 {
     [Fact]
     public void BenefitCost_ShouldApplyBaseEmployeeCost()
@@ -112,8 +112,8 @@ public class BenefitCostsUnitTest
         {
             EmployeeBaseCost = 1000m,
             DependentBaseCost = 600m,
-            DependentOverAgeThreshold = 50, 
-            DependentOverAgeCost = 200m, 
+            DependentOverAgeThreshold = 50,
+            DependentOverAgeCost = 200m,
             HighEarnerThreshold = 80000m,
             HighEarnerCostRate = 0.02m
         };

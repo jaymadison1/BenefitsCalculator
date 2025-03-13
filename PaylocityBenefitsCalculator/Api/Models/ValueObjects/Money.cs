@@ -33,9 +33,15 @@ public class Money
         return false;
     }
 
+    public bool Equals(Money? other)
+    {
+        return other is not null && Amount == other.Amount;
+    }
+
     // Ensures two Money instances with the same Amount have the same hash code
     public override int GetHashCode()
     {
         return Amount.GetHashCode();
     }
+
 }

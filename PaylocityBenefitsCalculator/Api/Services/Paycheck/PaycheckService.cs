@@ -7,7 +7,7 @@ public class PaycheckService : IPaycheckService
     private readonly IBenefitCostRepository _benefitCostRepository;
     private readonly IEmployeeRepository _employeeRepository;
 
-    public PaycheckService(IBenefitCostRepository benefitCostRepository, IEmployeeRepository employeeRepository)
+    public PaycheckService(IEmployeeRepository employeeRepository, IBenefitCostRepository benefitCostRepository)
     {
         _benefitCostRepository = benefitCostRepository;
         _employeeRepository = employeeRepository;

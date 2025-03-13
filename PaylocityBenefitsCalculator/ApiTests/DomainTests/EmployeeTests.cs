@@ -1,10 +1,10 @@
 using System;
 using Api.Models;
 using Xunit;
-namespace ApiTests.UnitTests;
+namespace ApiTests.DomainTests;
 
 public class EmployeeUnitTests
-{  
+{
 
     [Fact]
     public void AddDependent_ShouldThrowException_WhenAddingBothSpouseAndDomesticPartner()
